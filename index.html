@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #out {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea name="code" id="code" cols="30" rows="10"></textarea>
+    <pre id="out"></pre>
+    <button id="do">do</button>
+
+    <script type="module">
+      import prettier from 'https://unpkg.com/prettier@2.8.3/esm/standalone.mjs';
+      import parserBabel from 'https://unpkg.com/prettier@2.8.3/esm/parser-babel.mjs';
+      import parserHtml from 'https://unpkg.com/prettier@2.8.3/esm/parser-html.mjs';
+
+      document.getElementById('do').addEventListener('click', () => {
+        const data = prettier.format(document.getElementById('code').value, {
+          parser: 'babel',
+          plugins: [parserBabel, parserHtml],
+        });
+        document.getElementById('out').innerHTML = data;
+      });
+
+      document.getElementById('out').addEventListener('click', (event) => {
+        const storage = document.createElement('textarea');
+        storage.value = event.target.textContent;
+        const element = document.querySelector('body');
+        element.appendChild(storage);
+
+        storage.select();
+        storage.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        element.removeChild(storage);
+        console.log('OK');
+      });
+    </script>
+  </body>
+</html>
